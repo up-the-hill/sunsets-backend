@@ -6,6 +6,7 @@ import { Hono } from 'hono'
 import { sunsetsTable } from './db/schema.js';
 import { db } from './db/db.js';
 import { s3Client } from './aws.js';
+import { toGeoJSON } from './utility.js';
 
 // s3 imports
 import {
@@ -47,7 +48,7 @@ type formData = {
 
 app.get('/api/sunsets', async (c) => {
   const sunsets = await db.select().from(sunsetsTable)
-  return c.json(sunsets)
+  return c.json(toGeoJSON(sunsets))
 })
 
 app.post('/api/sunsets', async (c) => {
