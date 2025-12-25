@@ -8,7 +8,6 @@ import { pgTable, uuid, text, geometry } from "drizzle-orm/pg-core";
 // });
 
 export const sunsetsTable = pgTable("sunsets", {
-  id: uuid().primaryKey(),
-  s3Url: text().notNull().unique(),
+  id: uuid().primaryKey().unique(),
   geo: geometry('geo', { type: 'point' }),
 })
