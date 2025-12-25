@@ -1,4 +1,7 @@
-export function toGeoJSON(items) {
+import type { FeatureCollection } from "geojson";
+import { sunsetsTable } from "./db/schema.js";
+
+export function toGeoJSON(items: (typeof sunsetsTable.$inferInsert)[]): FeatureCollection {
   return {
     type: "FeatureCollection",
     features: items.map(item => ({
@@ -8,7 +11,6 @@ export function toGeoJSON(items) {
       },
       geometry: {
         type: "Point",
-        // ensure coordinates are numbers and in [lng, lat] order
         coordinates: [Number(item.geo[0]), Number(item.geo[1])]
       }
     }))

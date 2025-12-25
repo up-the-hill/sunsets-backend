@@ -9,5 +9,5 @@ import { pgTable, uuid, text, geometry } from "drizzle-orm/pg-core";
 
 export const sunsetsTable = pgTable("sunsets", {
   id: uuid().primaryKey().unique(),
-  geo: geometry('geo', { type: 'point' }),
+  geo: geometry('geo', { type: 'point' }).notNull(),
 })
