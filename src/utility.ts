@@ -7,7 +7,7 @@ export function toGeoJSON(items: (typeof sunsetsTable.$inferInsert)[]): FeatureC
     features: items.map(item => ({
       type: "Feature",
       properties: {
-        s3Url: item.id
+        id: item.id
       },
       geometry: {
         type: "Point",

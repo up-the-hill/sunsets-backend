@@ -10,12 +10,12 @@ import { toGeoJSON } from './utility.js';
 
 // s3 imports
 import {
+  GetObjectCommand,
   PutObjectCommand,
   S3Client,
 } from "@aws-sdk/client-s3";
 import {
   getSignedUrl,
-  S3RequestPresigner,
 } from "@aws-sdk/s3-request-presigner";
 
 
@@ -26,12 +26,21 @@ type CreatePresignedUrlWithClientParams = {
   key: string;
 };
 
-export const createPresignedUrlWithClient = async ({
+export const createPresignedPutUrl = async ({
   client,
   bucket,
   key,
 }: CreatePresignedUrlWithClientParams): Promise<string> => {
   const command = new PutObjectCommand({ Bucket: bucket, Key: key });
+  return getSignedUrl(client, command, { expiresIn: 3600 });
+};
+
+export const createPresignedGetUrl = async ({
+  client,
+  bucket,
+  key,
+}: CreatePresignedUrlWithClientParams): Promise<string> => {
+  const command = new GetObjectCommand({ Bucket: bucket, Key: key });
   return getSignedUrl(client, command, { expiresIn: 3600 });
 };
 
@@ -51,6 +60,17 @@ app.get('/api/sunsets', async (c) => {
   return c.json(toGeoJSON(sunsets))
 })
 
+
+app.get('/api/sunsets/:id', async (c) => {
+  const id = c.req.param('id')
+  const url = await createPresignedGetUrl({
+    client: s3Client,
+    bucket: process.env.AWS_BUCKET_NAME!,
+    key: id,
+  });
+  return c.text(url);
+})
+
 app.post('/api/sunsets', async (c) => {
   let fd: formData = await c.req.parseBody();
   console.log(fd)
@@ -59,7 +79,7 @@ app.post('/api/sunsets', async (c) => {
     let uuid = uuidv4();
 
     // create s3 presigned url
-    const clientUrl = await createPresignedUrlWithClient({
+    const clientUrl = await createPresignedPutUrl({
       client: s3Client,
       bucket: process.env.AWS_BUCKET_NAME!,
       key: uuid,
