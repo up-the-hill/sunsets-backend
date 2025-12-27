@@ -17,6 +17,7 @@ import {
 import {
   getSignedUrl,
 } from "@aws-sdk/s3-request-presigner";
+import { sql } from 'drizzle-orm';
 
 
 // s3 helper functions
@@ -44,6 +45,15 @@ export const createPresignedGetUrl = async ({
   return getSignedUrl(client, command, { expiresIn: 3600 });
 };
 
+function parseLngLatPair(str: string | undefined) {
+  if (!str) return null
+  const parts = str.split(',').map(s => s.trim())
+  if (parts.length !== 2) return null
+  const lng = Number(parts[0])
+  const lat = Number(parts[1])
+  if (Number.isNaN(lat) || Number.isNaN(lng)) return null
+  return { lng, lat }
+}
 
 // main
 const app = new Hono()
@@ -55,8 +65,34 @@ type formData = {
 
 // app.get('/', serveStatic({ path: './public/index.html' }))
 
+// // old api endpoint, gets all rows from table
+// app.get('/api/sunsets', async (c) => {
+//   const sunsets = await db.select().from(sunsetsTable)
+//   return c.json(toGeoJSON(sunsets))
+// })
+
+
 app.get('/api/sunsets', async (c) => {
-  const sunsets = await db.select().from(sunsetsTable)
+  const centreRaw = c.req.query('centre')
+  const zoomRaw = c.req.query('zoom')
+
+  const centre = parseLngLatPair(centreRaw)
+  const zoom = Number(zoomRaw);
+
+  if (!centre || !zoom) {
+    return c.json({ error: 'Invalid or missing query parameters.' }, 400);
+  }
+
+  if (zoom < 5) {
+    return c.json({ error: 'Zoom too low.' }, 400);
+  }
+
+  const radius = (36864 * 2 ** (1 - zoom))
+
+  const sunsets = await db.select().from(sunsetsTable).where(sql`ST_DWithin(
+    ${sunsetsTable.geo}, ST_SetSRID(ST_MakePoint(${centre.lng}, ${centre.lat}), 4326)::geography, ${radius * 1000}
+  )`)
+
   return c.json(toGeoJSON(sunsets))
 })
 

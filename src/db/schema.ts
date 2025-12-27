@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, geometry } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, geometry, time, timestamp } from "drizzle-orm/pg-core";
 
 // export const usersTable = pgTable("users", {
 //   id: uuid().primaryKey(),
@@ -10,4 +10,5 @@ import { pgTable, uuid, text, geometry } from "drizzle-orm/pg-core";
 export const sunsetsTable = pgTable("sunsets", {
   id: uuid().primaryKey().unique(),
   geo: geometry('geo', { type: 'point' }).notNull(),
+  date: timestamp('date').notNull().defaultNow(),
 })
