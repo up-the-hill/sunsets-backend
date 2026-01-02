@@ -2110,7 +2110,7 @@
       ],
       "layout": {
         "text-field": "{name}",
-        "text-font": ["Roboto Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 5,
         "text-size": 12,
         "symbol-placement": "line"
@@ -2133,7 +2133,7 @@
       ],
       "layout": {
         "text-field": "{name}",
-        "text-font": ["Roboto Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 5,
         "text-size": 12
       },
@@ -2170,7 +2170,7 @@
         "text-anchor": "top",
         "text-field": "{name}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-max-width": 9,
         "text-offset": [0, 0.6],
@@ -2211,7 +2211,7 @@
         "text-anchor": "top",
         "text-field": "{name}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-max-width": 9,
         "text-offset": [0, 0.6],
@@ -2252,7 +2252,7 @@
         "text-anchor": "top",
         "text-field": "{name}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-max-width": 9,
         "text-offset": [0, 0.6],
@@ -2285,7 +2285,7 @@
         "text-anchor": "left",
         "text-field": "{name_en}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-max-width": 9,
         "text-offset": [0.9, 0],
@@ -2308,7 +2308,7 @@
         "symbol-placement": "line",
         "text-anchor": "center",
         "text-field": "{name}",
-        "text-font": ["Roboto Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-offset": [0, 0.15],
         "text-size": {
           "base": 1,
@@ -2343,7 +2343,7 @@
         },
         "symbol-spacing": 500,
         "text-field": "{ref}",
-        "text-font": ["Roboto Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-offset": [0, 0.1],
         "text-rotation-alignment": "viewport",
         "text-size": 10,
@@ -2371,7 +2371,7 @@
       "layout": {
         "text-field": "{name_en}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-letter-spacing": 0.1,
         "text-max-width": 9,
@@ -2398,7 +2398,7 @@
       ],
       "layout": {
         "text-field": "{name_en}",
-        "text-font": ["Roboto Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 8,
         "text-size": {
           "base": 1.2,
@@ -2430,7 +2430,7 @@
         },
         "text-anchor": "bottom",
         "text-field": "{name_en}",
-        "text-font": ["Roboto Regular"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": {
@@ -2464,7 +2464,7 @@
         },
         "text-anchor": "bottom",
         "text-field": "{name_en}",
-        "text-font": ["Roboto Medium"],
+        "text-font": ["Noto Sans Regular"],
         "text-max-width": 8,
         "text-offset": [0, 0],
         "text-size": {
@@ -2493,7 +2493,7 @@
       "layout": {
         "text-field": "{name_en}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-size": {
           "stops": [[4, 11], [6, 15]]
@@ -2519,7 +2519,7 @@
       "layout": {
         "text-field": "{name_en}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-max-width": 6.25,
         "text-size": {
@@ -2548,7 +2548,7 @@
       "layout": {
         "text-field": "{name_en}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-max-width": 6.25,
         "text-size": {
@@ -2577,7 +2577,7 @@
       "layout": {
         "text-field": "{name_en}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-max-width": 6.25,
         "text-size": {
@@ -2606,7 +2606,7 @@
       "layout": {
         "text-field": "{name_en}",
         "text-font": [
-          "Roboto Condensed Italic"
+          "Noto Sans Italic"
         ],
         "text-size": 13,
         "text-transform": "uppercase",
