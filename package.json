@@ -17,8 +17,8 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
-    "@types/geojson": "^7946.0.16",
     "@aws-sdk/types": "^3.957.0",
+    "@types/geojson": "^7946.0.16",
     "@types/node": "^20.11.17",
     "@types/pg": "^8.16.0",
     "drizzle-kit": "^0.31.8",

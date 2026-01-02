@@ -1,7 +1,7 @@
 import 'dotenv/config';
 import { v4 as uuidv4 } from 'uuid';
 import { serve } from '@hono/node-server'
-// import { serveStatic } from '@hono/node-server/serve-static'
+import { serveStatic } from '@hono/node-server/serve-static'
 import { Hono } from 'hono'
 import { sunsetsTable } from './db/schema.js';
 import { db } from './db/db.js';
@@ -64,6 +64,8 @@ type formData = {
 }
 
 // app.get('/', serveStatic({ path: './public/index.html' }))
+
+app.get('/styles/sunset', serveStatic({ path: './public/sunset_min.json' }))
 
 // old api endpoint, gets all rows from table
 app.get('/api/sunsets', async (c) => {
