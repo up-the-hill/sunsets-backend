@@ -65,36 +65,36 @@ type formData = {
 
 // app.get('/', serveStatic({ path: './public/index.html' }))
 
-// // old api endpoint, gets all rows from table
-// app.get('/api/sunsets', async (c) => {
-//   const sunsets = await db.select().from(sunsetsTable)
-//   return c.json(toGeoJSON(sunsets))
-// })
-
-
+// old api endpoint, gets all rows from table
 app.get('/api/sunsets', async (c) => {
-  const centreRaw = c.req.query('centre')
-  const zoomRaw = c.req.query('zoom')
-
-  const centre = parseLngLatPair(centreRaw)
-  const zoom = Number(zoomRaw);
-
-  if (!centre || !zoom) {
-    return c.json({ error: 'Invalid or missing query parameters.' }, 400);
-  }
-
-  if (zoom < 5) {
-    return c.json({ error: 'Zoom too low.' }, 400);
-  }
-
-  const radius = (36864 * 2 ** (1 - zoom))
-
-  const sunsets = await db.select().from(sunsetsTable).where(sql`ST_DWithin(
-    ${sunsetsTable.geo}, ST_SetSRID(ST_MakePoint(${centre.lng}, ${centre.lat}), 4326)::geography, ${radius * 1000}
-  )`)
-
+  const sunsets = await db.select().from(sunsetsTable)
   return c.json(toGeoJSON(sunsets))
 })
+
+// newer location-based queries
+// app.get('/api/sunsets', async (c) => {
+//   const centreRaw = c.req.query('centre')
+//   const zoomRaw = c.req.query('zoom')
+//
+//   const centre = parseLngLatPair(centreRaw)
+//   const zoom = Number(zoomRaw);
+//
+//   if (!centre || !zoom) {
+//     return c.json({ error: 'Invalid or missing query parameters.' }, 400);
+//   }
+//
+//   if (zoom < 5) {
+//     return c.json({ error: 'Zoom too low.' }, 400);
+//   }
+//
+//   const radius = (36864 * 2 ** (1 - zoom))
+//
+//   const sunsets = await db.select().from(sunsetsTable).where(sql`ST_DWithin(
+//     ${sunsetsTable.geo}, ST_SetSRID(ST_MakePoint(${centre.lng}, ${centre.lat}), 4326)::geography, ${radius * 1000}
+//   )`)
+//
+//   return c.json(toGeoJSON(sunsets))
+// })
 
 
 app.get('/api/sunsets/:id', async (c) => {
