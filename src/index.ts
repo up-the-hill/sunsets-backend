@@ -17,6 +17,7 @@ import {
 import {
   getSignedUrl,
 } from "@aws-sdk/s3-request-presigner";
+import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
 import { sql } from 'drizzle-orm';
 
 
@@ -98,7 +99,7 @@ app.get('/api/sunsets', async (c) => {
 //   return c.json(toGeoJSON(sunsets))
 // })
 
-
+// get image
 app.get('/api/sunsets/:id', async (c) => {
   const id = c.req.param('id')
   const url = await createPresignedGetUrl({
@@ -109,6 +110,7 @@ app.get('/api/sunsets/:id', async (c) => {
   return c.text(url);
 })
 
+// upload image
 app.post('/api/sunsets', async (c) => {
   let fd: formData = await c.req.parseBody();
   console.log(fd)
@@ -116,11 +118,14 @@ app.post('/api/sunsets', async (c) => {
     // generate a uuidv4
     let uuid = uuidv4();
 
-    // create s3 presigned url
-    const clientUrl = await createPresignedPutUrl({
-      client: s3Client,
-      bucket: process.env.AWS_BUCKET_NAME!,
-      key: uuid,
+    // create s3 presigned POST
+    const { url, fields } = await createPresignedPost(s3Client, {
+      Bucket: process.env.AWS_BUCKET_NAME!,
+      Key: uuid,
+      Conditions: [
+        ["content-length-range", 0, 5242880], // up to 5 MB
+      ],
+      Expires: 3600,
     });
 
     const s: typeof sunsetsTable.$inferInsert = {
@@ -131,8 +136,9 @@ app.post('/api/sunsets', async (c) => {
     await db.insert(sunsetsTable).values(s)
 
     c.status(201)
-    return c.text(clientUrl)
-  } catch {
+    return c.json({ url, fields })
+  } catch (e) {
+    console.error(e)
     c.status(500)
     return c.text("Internal Server Error")
   }

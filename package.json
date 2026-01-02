@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.958.0",
+    "@aws-sdk/s3-presigned-post": "^3.958.0",
     "@aws-sdk/s3-request-presigner": "^3.958.0",
     "@hono/node-server": "^1.19.6",
     "dotenv": "^17.2.3",
