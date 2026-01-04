@@ -18,7 +18,7 @@ import {
   getSignedUrl,
 } from "@aws-sdk/s3-request-presigner";
 import { createPresignedPost } from "@aws-sdk/s3-presigned-post";
-import { sql } from 'drizzle-orm';
+// import { sql } from 'drizzle-orm';
 
 
 // s3 helper functions
@@ -113,7 +113,6 @@ app.get('/api/sunsets/:id', async (c) => {
 // upload image
 app.post('/api/sunsets', async (c) => {
   let fd: formData = await c.req.parseBody();
-  console.log(fd)
   try {
     // generate a uuidv4
     let uuid = uuidv4();
