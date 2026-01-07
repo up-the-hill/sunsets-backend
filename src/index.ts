@@ -7,6 +7,26 @@ import { sunsetsTable } from './db/schema.js';
 import { db } from './db/db.js';
 import { s3Client } from './aws.js';
 import { toGeoJSON } from './utility.js';
+import * as tf from '@tensorflow/tfjs-node';
+
+const model = await tf.loadLayersModel('file://public/sunsets-model/model.json');
+
+async function preprocessBuffer(imageBuffer: Buffer) {
+  const decoded = tf.node.decodeImage(imageBuffer, 3);
+
+  const out = tf.tidy(() => {
+    const resized = tf.image.resizeBilinear(decoded, [224, 224]);
+    const floatImg = resized.toFloat();
+    const normalized = floatImg.div(127.5).sub(1.0);
+    const batched = normalized.expandDims(0);
+
+    return batched;
+  });
+
+  decoded.dispose();
+
+  return out; // caller must dispose: out.dispose()
+}
 
 // s3 imports
 import {
@@ -62,6 +82,7 @@ const app = new Hono()
 type formData = {
   longitude: number,
   latitude: number,
+  file: File
 }
 
 // app.get('/', serveStatic({ path: './public/index.html' }))
@@ -112,7 +133,24 @@ app.get('/api/sunsets/:id', async (c) => {
 
 // upload image
 app.post('/api/sunsets', async (c) => {
-  let fd: formData = await c.req.parseBody();
+  let fd: formData = await c.req.parseBody() as any;
+
+  // check if image is a sunset
+  const file = fd.file;
+  const imageBuffer = Buffer.from(await file.arrayBuffer());
+  const input = await preprocessBuffer(imageBuffer);
+
+  let prediction = model.predict(input).squeeze();
+  let highestIndex = prediction.argMax().arraySync();
+  let predictionArray = prediction.arraySync();
+  console.log('Prediction: ' + highestIndex + ' with ' + Math.floor(predictionArray[highestIndex] * 100) + '% confidence')
+  console.log(predictionArray[highestIndex])
+
+  if (highestIndex === 0 && predictionArray[highestIndex] < 0.9) {
+    c.status(400)
+    return c.text("ImageNotSunset")
+  }
+
   try {
     // generate a uuidv4
     let uuid = uuidv4();
