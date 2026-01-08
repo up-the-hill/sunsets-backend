@@ -140,11 +140,11 @@ app.post('/api/sunsets', async (c) => {
   const imageBuffer = Buffer.from(await file.arrayBuffer());
   const input = await preprocessBuffer(imageBuffer);
 
-  let prediction = model.predict(input).squeeze();
-  let highestIndex = prediction.argMax().arraySync();
-  let predictionArray = prediction.arraySync();
-  console.log('Prediction: ' + highestIndex + ' with ' + Math.floor(predictionArray[highestIndex] * 100) + '% confidence')
-  console.log(predictionArray[highestIndex])
+  let prediction = (model.predict(input) as tf.Tensor).squeeze();
+  let highestIndex = prediction.argMax().arraySync() as number;
+  let predictionArray = prediction.arraySync() as number[];
+  // console.log('Prediction: ' + highestIndex + ' with ' + Math.floor(predictionArray[highestIndex] * 100) + '% confidence')
+  // console.log(predictionArray[highestIndex])
 
   // if not sunset return error
   if (highestIndex === 0) {

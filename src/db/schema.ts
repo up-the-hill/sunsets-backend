@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, geometry, time, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, geometry, timestamp } from "drizzle-orm/pg-core";
 
 // export const usersTable = pgTable("users", {
 //   id: uuid().primaryKey(),
