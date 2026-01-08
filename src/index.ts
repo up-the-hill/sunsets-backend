@@ -146,7 +146,14 @@ app.post('/api/sunsets', async (c) => {
   console.log('Prediction: ' + highestIndex + ' with ' + Math.floor(predictionArray[highestIndex] * 100) + '% confidence')
   console.log(predictionArray[highestIndex])
 
-  if (highestIndex === 0 && predictionArray[highestIndex] < 0.9) {
+  // if not sunset return error
+  if (highestIndex === 0) {
+    c.status(400)
+    return c.text("ImageNotSunset")
+  }
+
+  // if sunset with less than 90% confidence, return error
+  if (highestIndex === 1 && predictionArray[highestIndex] < 0.9) {
     c.status(400)
     return c.text("ImageNotSunset")
   }
